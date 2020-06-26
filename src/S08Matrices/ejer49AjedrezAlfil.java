@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class ejer49AjedrezAlfil {
     static char[][] matriz = new char[8][8];
+
     /*
         Teniendo una matriz de char de 8x8 simular el movimiento de una un
         alfil de ajedrez.
@@ -21,8 +22,7 @@ public class ejer49AjedrezAlfil {
         int posActualAlfilX = generaPosicionAleatoria();
         int posActualAlfilY = generaPosicionAleatoria();
         int posAntiguaAlfilX = 0, posAntiguaAlfilY = 0;
-        int dirX, dirY, numPosiciones;
-
+        int dirX = 0, dirY = 0, numPosiciones;
 
 
         rellenarMatriz(VACIO);
@@ -56,20 +56,20 @@ public class ejer49AjedrezAlfil {
 
                 switch (opcion) {
                     case 1:
-                        dirX=-1;
-                        dirY=1;
+                        dirX = -1;
+                        dirY = 1;
                         break;
                     case 2:
-                        dirX=1;
-                        dirY=1;
+                        dirX = 1;
+                        dirY = 1;
                         break;
                     case 3:
-                        dirX=1;
-                        dirY=-1;
+                        dirX = 1;
+                        dirY = -1;
                         break;
                     case 4:
-                        dirX=-1;
-                        dirY=-1;
+                        dirX = -1;
+                        dirY = -1;
                         break;
                     case 5:
                         salir = true;
@@ -78,16 +78,14 @@ public class ejer49AjedrezAlfil {
                         System.out.println("Solo números entre 1 y 5");
                 }
 
-                // Si está dentro, rellena y cambia la antigua a vacío
-                if (estaDentroMatriz(posActualAlfilX, posActualAlfilY)) {
-                    matriz[posActualAlfilX][posActualAlfilY] = ALFIL;
-                    matriz[posAntiguaAlfilX][posAntiguaAlfilY] = VACIO;
-                } else {
-                    // si es fuera lo mantiene
-                    System.out.println("Te sales de la matriz");
-                    posActualAlfilX = posAntiguaAlfilX;
-                    posActualAlfilY = posAntiguaAlfilY;
+                while (estaDentroMatriz(posActualAlfilX + dirX, posActualAlfilY + dirY)) {
+                    posActualAlfilX += dirX;
+                    posActualAlfilY += dirY;
                 }
+
+                matriz[posAntiguaAlfilX][posAntiguaAlfilY] = VACIO;
+                matriz[posActualAlfilX][posActualAlfilY] = ALFIL;
+
 
             } catch (InputMismatchException e) {
                 System.out.println("Debes insertar un número");
