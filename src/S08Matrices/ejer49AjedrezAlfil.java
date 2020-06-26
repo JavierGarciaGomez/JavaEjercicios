@@ -5,27 +5,30 @@ import java.util.Scanner;
 
 public class ejer49AjedrezAlfil {
     static char[][] matriz = new char[8][8];
-
-
-
     /*
         Teniendo una matriz de char de 8x8 simular el movimiento de una un
-        rey de ajedrez.
-        Pudiendose moverse una posicion dentro del tablero.
+        alfil de ajedrez.
+        Pudiendose moverse en diagonal dentro del tablero.
         Deberas mostrar donde se encuentra en cada momento.
+        Su posicion inicial sera aleatoria.
         Mi consejo es que uses un menú.
      */
     public static void main(String[] args) {
 
         final char VACIO = 'X';
-        final char REY = 'O';
+        final char ALFIL = 'O';
+
+        int posActualAlfilX = generaPosicionAleatoria();
+        int posActualAlfilY = generaPosicionAleatoria();
+        int posAntiguaAlfilX = 0, posAntiguaAlfilY = 0;
+        int dirX, dirY, numPosiciones;
+
+
 
         rellenarMatriz(VACIO);
 
-        int posActualReyX = 0, posAntiguaReyX = 0; // fila
-        int posActualReyY = 0, posAntiguaReyY = 0; // columna
 
-        matriz[posActualReyX][posActualReyY] = REY;
+        matriz[posActualAlfilX][posActualAlfilY] = ALFIL;
 
         Scanner sn = new Scanner(System.in);
         boolean salir = false;
@@ -36,15 +39,11 @@ public class ejer49AjedrezAlfil {
             mostrarMatriz();
 
             System.out.println("¿Donde quieres moverte?");
-            System.out.println("1. Mover arriba");
-            System.out.println("2. Mover arriba-derecha");
-            System.out.println("3. Mover derecha");
-            System.out.println("4. Mover abajo-derecha");
-            System.out.println("5. Mover abajo");
-            System.out.println("6. Mover abajo-izquierda");
-            System.out.println("7. Mover izquierda");
-            System.out.println("8. Mover arriba-izquierda");
-            System.out.println("9. Salir");
+            System.out.println("1. Mover arriba-derecha");
+            System.out.println("2. Mover abajo-derecha");
+            System.out.println("3. Mover abajo-izquierda");
+            System.out.println("4. Mover arriba-izquierda");
+            System.out.println("5. Salir");
 
             try {
 
@@ -52,54 +51,42 @@ public class ejer49AjedrezAlfil {
                 opcion = sn.nextInt();
 
                 // Se guarda la posición antigua
-                posAntiguaReyX = posActualReyX;
-                posAntiguaReyY = posActualReyY;
+                posAntiguaAlfilX = posActualAlfilX;
+                posAntiguaAlfilY = posActualAlfilY;
 
                 switch (opcion) {
                     case 1:
-                        posActualReyX--;
+                        dirX=-1;
+                        dirY=1;
                         break;
                     case 2:
-                        posActualReyX--;
-                        posActualReyY++;
+                        dirX=1;
+                        dirY=1;
                         break;
                     case 3:
-                        posActualReyY++;
+                        dirX=1;
+                        dirY=-1;
                         break;
                     case 4:
-                        posActualReyX++;
-                        posActualReyY++;
+                        dirX=-1;
+                        dirY=-1;
                         break;
                     case 5:
-                        posActualReyX++;
-                        break;
-                    case 6:
-                        posActualReyX++;
-                        posActualReyY--;
-                        break;
-                    case 7:
-                        posActualReyY--;
-                        break;
-                    case 8:
-                        posActualReyX--;
-                        posActualReyY--;
-                        break;
-                    case 9:
                         salir = true;
                         break;
                     default:
-                        System.out.println("Solo números entre 1 y 9");
+                        System.out.println("Solo números entre 1 y 5");
                 }
 
                 // Si está dentro, rellena y cambia la antigua a vacío
-                if (estaDentroMatriz(posActualReyX, posActualReyY)) {
-                    matriz[posActualReyX][posActualReyY] = REY;
-                    matriz[posAntiguaReyX][posAntiguaReyY] = VACIO;
+                if (estaDentroMatriz(posActualAlfilX, posActualAlfilY)) {
+                    matriz[posActualAlfilX][posActualAlfilY] = ALFIL;
+                    matriz[posAntiguaAlfilX][posAntiguaAlfilY] = VACIO;
                 } else {
                     // si es fuera lo mantiene
                     System.out.println("Te sales de la matriz");
-                    posActualReyX = posAntiguaReyX;
-                    posActualReyY = posAntiguaReyY;
+                    posActualAlfilX = posAntiguaAlfilX;
+                    posActualAlfilY = posAntiguaAlfilY;
                 }
 
             } catch (InputMismatchException e) {
@@ -126,6 +113,11 @@ public class ejer49AjedrezAlfil {
             }
         }
     }
+
+    private static int generaPosicionAleatoria() {
+        return (int) (Math.random() * (matriz.length - 0 + 1));
+    }
+
 
     public static boolean estaDentroMatriz(int x, int y) {
         return x >= 0 && x < matriz.length && y >= 0 && y < matriz[0].length;

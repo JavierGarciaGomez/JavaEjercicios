@@ -1,6 +1,6 @@
 package S08Matrices;
 
-public class ejer45 {
+public class ejer46 {
 
     /*
         Crea una matriz de números de 3x3 tu mismo y recorre su diagonal principal y su diagonal inversa.
