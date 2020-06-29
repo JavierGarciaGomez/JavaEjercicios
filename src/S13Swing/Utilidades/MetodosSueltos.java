@@ -5,31 +5,70 @@ import S13Swing.clases.Aeropuerto;
 import java.io.*;
 
 public class MetodosSueltos {
-    public static void leerAeropuertos(){
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(
-                new FileInputStream(VariablesGlobales.FICHERO_AEROPUERTS))){
-            while(true){
-                Aeropuerto aeropuerto = (Aeropuerto) objectInputStream.readObject();
-                VariablesGlobales.aeropuertos.add(aeropuerto);
-                System.out.println(aeropuerto);
+
+    /**
+     * Rellena los aeropuertos del fichero de datos en la lista
+     */
+    public static void leerAeropuertos() {
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(VariablesGlobales.FICHERO_AEROPUERTOS))) {
+
+            while (true) {
+                Aeropuerto a = (Aeropuerto) ois.readObject();
+                VariablesGlobales.aeropuertos.add(a);
             }
 
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        } catch (EOFException e) {
+        } catch (IOException | ClassNotFoundException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
-    public static void escribirAeropuerto(Aeropuerto aeropuerto) throws IOException {
-        File file = new File(VariablesGlobales.FICHERO_AEROPUERTS);
-        if(file.exists()){
-            MiObjectOutputStream miObjectOutputStream = new MiObjectOutputStream(new FileOutputStream(file));
-            miObjectOutputStream.writeObject(aeropuerto);
-            miObjectOutputStream.close();
-        } else{
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file));
-            objectOutputStream.writeObject(aeropuerto);
-            objectOutputStream.close();
+    /**
+     * Escribe un aeropuerto en la lista y en el fichero
+     *
+     * @param a
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public static void escribirAeropuerto(Aeropuerto a) throws FileNotFoundException, IOException {
+
+        File f = new File(VariablesGlobales.FICHERO_AEROPUERTOS);
+
+        if (f.exists()) {
+            MiObjectOutputStream oos = new MiObjectOutputStream(new FileOutputStream(VariablesGlobales.FICHERO_AEROPUERTOS,true));
+            oos.writeObject(a);
+            oos.close();
+        } else {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(VariablesGlobales.FICHERO_AEROPUERTOS));
+            oos.writeObject(a);
+            oos.close();
         }
-        VariablesGlobales.aeropuertos.add(aeropuerto);
+
+        VariablesGlobales.aeropuertos.add(a);
+
     }
+
+    /**
+     * Valida si una cadena es un numero entero
+     *
+     * @param texto String que contiene el valor a validar
+     * @return True = es un numero entero
+     */
+    public static boolean validaNumeroEntero_Exp(String texto) {
+        return texto.matches("^-?[0-9]+$");
+    }
+
+    /**
+     * Valida si una cadena es un numero real (positivo o negativo)
+     *
+     * @param texto String que contiene el valor a validar
+     * @return True = es un numero real
+     */
+    public static boolean validaNumeroReal_Exp(String texto) {
+        return texto.matches("^-?[0-9]+([\\.,][0-9]+)?$");
+    }
+
 }
