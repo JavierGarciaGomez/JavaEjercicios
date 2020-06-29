@@ -1,6 +1,8 @@
 package S13Swing.secondTry.formularios;
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
 
 public class Login extends javax.swing.JFrame {
 
@@ -23,6 +25,7 @@ public class Login extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        this.setLayout(new BorderLayout());
 
         btnLogin = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
@@ -33,7 +36,6 @@ public class Login extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnLogin.setText("Login");
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
@@ -41,7 +43,7 @@ public class Login extends javax.swing.JFrame {
                 btnLoginActionPerformed(evt);
             }
         });
-        getContentPane().add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 140, 80, -1));
+
 
         btnSalir.setText("Salir");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -49,19 +51,39 @@ public class Login extends javax.swing.JFrame {
                 btnSalirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 140, 70, -1));
-        getContentPane().add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 160, -1));
-        getContentPane().add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 100, 160, -1));
+
 
         jLabel1.setText("Contraseña");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, -1, -1));
-
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Escribe las credenciales para entrar");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 300, 30));
-
         jLabel3.setText("Nombre");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, -1, -1));
+
+        txtNombre.setColumns(8);
+        txtPass.setColumns(8);
+        txtNombre.setText("admin");
+        txtPass.setText("admin");
+
+
+
+
+
+        JPanel northPane = new JPanel();
+        JPanel centerPane = new JPanel(new GridLayout(1,1));
+        JPanel southPane = new JPanel();
+
+        northPane.add(jLabel2);
+        this.getContentPane().add(northPane, BorderLayout.NORTH);
+
+        centerPane.add(jLabel3);
+        centerPane.add(txtNombre);
+        centerPane.add(jLabel1);
+        centerPane.add(txtPass);
+        this.getContentPane().add(centerPane, BorderLayout.CENTER);
+
+        southPane.add(btnLogin);
+        southPane.add(btnSalir);
+        this.getContentPane().add(southPane, BorderLayout.SOUTH);
+
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

@@ -1,6 +1,7 @@
 package S13Swing.secondTry.utilidades;
 
-import clases.Aeropuerto;
+import S13Swing.secondTry.clases.Aeropuerto;
+
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;

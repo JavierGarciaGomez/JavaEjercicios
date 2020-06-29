@@ -1,11 +1,9 @@
 package S13Swing.secondTry.formularios;
 
+import java.awt.*;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-import S13Swing.secondTry.*;
 import S13Swing.secondTry.clases.*;
 import S13Swing.secondTry.utilidades.*;
 
@@ -53,58 +51,35 @@ public class AniadirAeropuerto extends javax.swing.JDialog {
         txtDiscapacitados = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(txtCalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 210, 170, -1));
+        getContentPane().setLayout(new GridLayout(0,2));
 
-        jLabel9.setText("Discapacitados");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 100, 20));
+        jLabel1.setText("Nombre");
+        getContentPane().add(jLabel1);
+        getContentPane().add(txtNombre);
+
+        jLabel4.setText("País");
+        getContentPane().add(jLabel4);
+        getContentPane().add(txtPais);
+
+        jLabel6.setText("Número");
+        getContentPane().add(jLabel6);
+        getContentPane().add(txtNumero);
 
         jLabel5.setText("Calle");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 40, 20));
-
-        jLabel10.setText("Numero de socios");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 480, 110, 20));
-        getContentPane().add(txtNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 120, 170, -1));
-
-        txtNumSocios.setEnabled(false);
-        getContentPane().add(txtNumSocios, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 480, 170, -1));
-        getContentPane().add(txtAnioInauguracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 250, 170, -1));
-
-        jLabel6.setText("Numero");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 90, 20));
-
-        btnGuardar.setText("Guardar");
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 520, 93, -1));
-
-        jLabel2.setText("Año inauguración");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 110, 20));
-
-        txtCiudad.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCiudadActionPerformed(evt);
-            }
-        });
-        getContentPane().add(txtCiudad, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, 170, -1));
-
-        btnCancelar.setText("Cancelar");
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 520, -1, -1));
-        getContentPane().add(txtCapacidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 290, 170, -1));
+        getContentPane().add(jLabel5);
+        getContentPane().add(txtCalle);
 
         jLabel7.setText("Ciudad");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 70, 20));
+        getContentPane().add(jLabel7);
+        getContentPane().add(txtCiudad);
+
+        jLabel2.setText("Año inauguración");
+        getContentPane().add(jLabel2);
+        getContentPane().add(txtAnioInauguracion);
 
         jLabel3.setText("Capacidad");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 90, 20));
+        getContentPane().add(jLabel3);
+        getContentPane().add(txtCapacidad);
 
         rdbPublico.setSelected(true);
         rdbPublico.setText("Público");
@@ -113,7 +88,7 @@ public class AniadirAeropuerto extends javax.swing.JDialog {
                 rdbPublicoActionPerformed(evt);
             }
         });
-        getContentPane().add(rdbPublico, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, -1, -1));
+        getContentPane().add(rdbPublico);
 
         rdbPrivado.setText("Privado");
         rdbPrivado.addActionListener(new java.awt.event.ActionListener() {
@@ -121,20 +96,43 @@ public class AniadirAeropuerto extends javax.swing.JDialog {
                 rdbPrivadoActionPerformed(evt);
             }
         });
-        getContentPane().add(rdbPrivado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, -1, -1));
-        getContentPane().add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 40, 170, -1));
+        getContentPane().add(rdbPrivado);
 
-        jLabel1.setText("Nombre");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(21, 40, 70, 20));
-        getContentPane().add(txtFinanciacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 360, 170, -1));
-        getContentPane().add(txtPais, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 170, -1));
 
         jLabel8.setText("Financiación");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, 100, 20));
+        getContentPane().add(jLabel8);
+        getContentPane().add(txtFinanciacion);
 
-        jLabel4.setText("País");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 80, 20));
-        getContentPane().add(txtDiscapacitados, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 400, 170, -1));
+        jLabel9.setText("Discapacitados");
+        getContentPane().add(jLabel9);
+        getContentPane().add(txtDiscapacitados);
+
+        jLabel10.setText("Numero de socios");
+        getContentPane().add(jLabel10);
+        txtNumSocios.setEnabled(false);
+        getContentPane().add(txtNumSocios);
+
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnGuardar);
+
+
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnCancelar);
+
+
+
+
+
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

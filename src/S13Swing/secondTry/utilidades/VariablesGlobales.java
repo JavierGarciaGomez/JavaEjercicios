@@ -1,6 +1,6 @@
 package S13Swing.secondTry.utilidades;
 
-import clases.Aeropuerto;
+import S13Swing.secondTry.clases.Aeropuerto;
 import java.util.ArrayList;
 
 public class VariablesGlobales {

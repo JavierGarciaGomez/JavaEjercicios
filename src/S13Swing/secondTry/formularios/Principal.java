@@ -1,26 +1,37 @@
 package S13Swing.secondTry.formularios;
 
-import clases.Aeropuerto;
+import S13Swing.secondTry.clases.Aeropuerto;
+import S13Swing.secondTry.clases.AeropuertoPrivado;
+import S13Swing.secondTry.clases.AeropuertoPublico;
+import S13Swing.secondTry.utilidades.MetodosSueltos;
+import S13Swing.secondTry.utilidades.VariablesGlobales;
+
 import javax.swing.table.DefaultTableModel;
-import utilidades.MetodosSueltos;
-import utilidades.VariablesGlobales;
 
 public class Principal extends javax.swing.JFrame {
 
     private DefaultTableModel modeloTabla;
 
+    private final int PRIVADO = 1;
+    private final int PUBLICO = 2;
+
     /*
-        Añade un Jtable donde mostremos todos los aeropuertos disponibles en 
-        nuestra lista. Rellenalos con la lista de aeropuertos
+        En la ventana Principal, añade un JTextfield encima de la tabla de
+        aeropuertos y cuando se escriba una letra filtre por coincidencia en el nombre.
+        Usa el evento de teclado para ello.
      */
     public Principal() {
         initComponents();
         this.setLocationRelativeTo(null);
         MetodosSueltos.leerAeropuertos(); // Relleno los aeropuertos del fichero en la lista
-        this.cargarDatos();
+
+        this.buttonGroup1.add(this.rdbPrivado);
+        this.buttonGroup1.add(this.rdbPublico);
+
+        this.cargarDatos(PRIVADO, "");
     }
 
-    public void cargarDatos() {
+    public void cargarDatos(int tipo, String coincidenciaNombre) {
 
         this.modeloTabla = new DefaultTableModel() {
             @Override
@@ -31,8 +42,8 @@ public class Principal extends javax.swing.JFrame {
 
         this.tblAeropuertos.setModel(modeloTabla);
 
-        
-        
+        int numColumnas = 0;
+
         modeloTabla.addColumn("Id");
         modeloTabla.addColumn("Nombre");
         modeloTabla.addColumn("Pais");
@@ -41,28 +52,49 @@ public class Principal extends javax.swing.JFrame {
         modeloTabla.addColumn("Ciudad");
         modeloTabla.addColumn("Año");
         modeloTabla.addColumn("Capacidad");
-        
+
+        if (tipo == PRIVADO) {
+            modeloTabla.addColumn("Socios");
+            numColumnas = 9;
+        } else {
+            modeloTabla.addColumn("Financiacion");
+            modeloTabla.addColumn("Discapacitados");
+            numColumnas = 10;
+        }
+
         this.tblAeropuertos.getColumnModel().getColumn(0).setPreferredWidth(20);
-        
-        
+
         Object[] fila;
+
         for (Aeropuerto aux : VariablesGlobales.aeropuertos) {
 
-            fila= new Object[8];
-            
-            fila[0] = aux.getId();
-            fila[1] = aux.getNombre();
-            fila[2] = aux.getDireccion().getPais();
-            fila[3] = aux.getDireccion().getNumero();
-            fila[4] = aux.getDireccion().getCalle();
-            fila[5] = aux.getDireccion().getCiudad();
-            fila[6] = aux.getAnioInauguracion();
-            fila[7] = aux.getCapacidad();
-            
-            modeloTabla.addRow(fila);
-            
+            if (aux.getNombre().toLowerCase().contains(coincidenciaNombre.toLowerCase())) {
+                fila = new Object[numColumnas];
+
+                fila[0] = aux.getId();
+                fila[1] = aux.getNombre();
+                fila[2] = aux.getDireccion().getPais();
+                fila[3] = aux.getDireccion().getNumero();
+                fila[4] = aux.getDireccion().getCalle();
+                fila[5] = aux.getDireccion().getCiudad();
+                fila[6] = aux.getAnioInauguracion();
+                fila[7] = aux.getCapacidad();
+
+                if (tipo == PRIVADO && aux instanceof AeropuertoPrivado) {
+                    AeropuertoPrivado ap = (AeropuertoPrivado) aux;
+                    fila[8] = ap.getNumSocios();
+                    modeloTabla.addRow(fila);
+
+                } else if (tipo == PUBLICO && aux instanceof AeropuertoPublico) {
+                    AeropuertoPublico ap = (AeropuertoPublico) aux;
+                    fila[8] = ap.getFinanciacion();
+                    fila[9] = ap.getNumTrabajadoresDiscapacitados();
+                    modeloTabla.addRow(fila);
+
+                }
+            }
+
         }
-        
 
     }
 
@@ -75,8 +107,13 @@ public class Principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAeropuertos = new javax.swing.JTable();
+        rdbPrivado = new javax.swing.JRadioButton();
+        rdbPublico = new javax.swing.JRadioButton();
+        txtFiltroNombre = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -93,17 +130,43 @@ public class Principal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         tblAeropuertos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
+                new Object [][] {
+                        {null, null, null, null},
+                        {null, null, null, null},
+                        {null, null, null, null},
+                        {null, null, null, null}
+                },
+                new String [] {
+                        "Title 1", "Title 2", "Title 3", "Title 4"
+                }
         ));
         jScrollPane1.setViewportView(tblAeropuertos);
+
+        rdbPrivado.setSelected(true);
+        rdbPrivado.setText("Privado");
+        rdbPrivado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbPrivadoActionPerformed(evt);
+            }
+        });
+
+        rdbPublico.setText("Público");
+        rdbPublico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbPublicoActionPerformed(evt);
+            }
+        });
+
+        txtFiltroNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtFiltroNombreKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtFiltroNombreKeyReleased(evt);
+            }
+        });
+
+        jLabel1.setText("Escribe un nombre");
 
         jMenu3.setText("Aeropuertos");
 
@@ -170,18 +233,33 @@ public class Principal extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 691, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(22, 22, 22)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(rdbPrivado)
+                                                .addGap(27, 27, 27)
+                                                .addComponent(rdbPublico)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jLabel1)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(txtFiltroNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 691, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(36, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
-                .addContainerGap())
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap(29, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(rdbPrivado)
+                                        .addComponent(rdbPublico)
+                                        .addComponent(txtFiltroNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel1))
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 482, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
         );
 
         pack();
@@ -207,12 +285,38 @@ public class Principal extends javax.swing.JFrame {
 
         AniadirAeropuerto ventana = new AniadirAeropuerto(this, true);
         ventana.setVisible(true);
-        this.cargarDatos();
+        if (this.rdbPrivado.isSelected()) {
+            this.cargarDatos(PRIVADO, this.txtFiltroNombre.getText());
+        } else {
+            this.cargarDatos(PUBLICO, this.txtFiltroNombre.getText());
+        }
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void rdbPrivadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbPrivadoActionPerformed
+        this.cargarDatos(PRIVADO, this.txtFiltroNombre.getText());
+    }//GEN-LAST:event_rdbPrivadoActionPerformed
+
+    private void rdbPublicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbPublicoActionPerformed
+        this.cargarDatos(PUBLICO, this.txtFiltroNombre.getText());
+    }//GEN-LAST:event_rdbPublicoActionPerformed
+
+    private void txtFiltroNombreKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFiltroNombreKeyPressed
+
+    }//GEN-LAST:event_txtFiltroNombreKeyPressed
+
+    private void txtFiltroNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFiltroNombreKeyReleased
+        if (this.rdbPrivado.isSelected()) {
+            this.cargarDatos(PRIVADO, this.txtFiltroNombre.getText());
+        } else {
+            this.cargarDatos(PUBLICO, this.txtFiltroNombre.getText());
+        }
+    }//GEN-LAST:event_txtFiltroNombreKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -226,6 +330,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JRadioButton rdbPrivado;
+    private javax.swing.JRadioButton rdbPublico;
     private javax.swing.JTable tblAeropuertos;
+    private javax.swing.JTextField txtFiltroNombre;
     // End of variables declaration//GEN-END:variables
 }
