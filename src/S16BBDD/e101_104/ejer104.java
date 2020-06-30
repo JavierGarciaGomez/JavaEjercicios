@@ -1,8 +1,9 @@
-package S16BBDD;
+package S16BBDD.e101_104;
 
 import java.sql.*;
+import java.util.Scanner;
 
-public class ejer105 {
+public class ejer104 {
     public static void main(String[] args) {
         try {
             Connection connection;

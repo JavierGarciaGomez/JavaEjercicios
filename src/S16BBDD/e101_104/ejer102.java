@@ -1,9 +1,8 @@
-package S16BBDD;
+package S16BBDD.e101_104;
 
 import java.sql.*;
-import java.util.Scanner;
 
-public class ejer103 {
+public class ejer102 {
     public static void main(String[] args) {
         try {
             Connection connection;
@@ -18,18 +17,10 @@ public class ejer103 {
             connection.setAutoCommit(true);
 
             Statement statement = connection.createStatement();
-
-
-            System.out.println("Escribe el nombre del aeropuerto");
-            String aeropuertoNombre = (new Scanner(System.in)).nextLine();
-
-
             String SQL = "";
             SQL += "Select a.nombre, a.anio_inauguracion, a.capacidad, d.pais, d.ciudad, d.calle, d.numero ";
             SQL += "FROM aeropuertos a, direcciones d ";
             SQL += "WHERE a.id_direccion = d.id";
-            SQL += "and trim(lower(a.nombre)) LIKE '%"+aeropuertoNombre.toLowerCase().trim()+"%'";
-
 
             ResultSet resultSet = statement.executeQuery(SQL);
             while(resultSet.next()){
@@ -42,9 +33,10 @@ public class ejer103 {
                 System.out.println("Número: "+resultSet.getInt(7));
                 System.out.println("\n");
             }
+
+
             statement.close();
             connection.close();
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
