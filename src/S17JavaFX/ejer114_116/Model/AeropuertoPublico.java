@@ -1,6 +1,12 @@
-package S17JavaFX.ejer114.modelo;
+package S17JavaFX.ejer114_116.Model;
+
+import S17JavaFX.ejer114_116.Utilities.ConnectionDB;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Clase Aeropuerto publico, heredad de Aeropuerto
@@ -152,6 +158,44 @@ public class AeropuertoPublico extends Aeropuerto implements Serializable {
     @Override
     public String mostrarInformacion() {
         return super.mostrarInformacion() + "El aeropuerto es publico y su financiacion por parte del estado es de " + financiacion + " y hay " + numTrabajadoresDiscapacitados + " trabajadores discapacitados";
+    }
+
+    @Override
+    public ObservableList<AeropuertoPublico> getAeropuertos() throws SQLException {
+        ObservableList<AeropuertoPublico> aeropuertos = FXCollections.observableArrayList();
+        ConnectionDB connectionDB = new ConnectionDB();
+        connectionDB.cerrarConexion();
+
+        String SQL = "";
+        SQL += "SELECT a.id, a.nombre, a.anio_inauguracion, a.capacidad, ";
+        SQL += "d.pais, d.ciudad, d.calle, d.numero, ap.financiacion, ap.num_trab_discapacitados ";
+        SQL += "FROM aeropuertos a, direcciones d, aeropuertos_publicos ap ";
+        SQL += "WHERE a.id_direccion = d.id and ap.id_aeropuerto = a.id";
+
+        ResultSet rs = connectionDB.ejecutarConsulta(SQL);
+
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String nombre = rs.getString("nombre");
+            int anio = rs.getInt("anio_inauguracion");
+            int capacidad = rs.getInt("capacidad");
+            String pais = rs.getString("pais");
+            String ciudad = rs.getString("ciudad");
+            String calle = rs.getString("calle");
+            int numero = rs.getInt("numero");
+            double financiacion = rs.getDouble("financiacion");
+            int discapacitados = rs.getInt("num_trab_discapacitados");
+
+            Direccion dir = new Direccion(pais, calle, numero, ciudad);
+
+            AeropuertoPublico a = new AeropuertoPublico(financiacion, discapacitados, id, nombre, dir, anio, capacidad);
+
+            aeropuertos.add(a);
+        }
+
+        rs.close();
+        connectionDB.cerrarConexion();
+        return aeropuertos;
     }
 
 }

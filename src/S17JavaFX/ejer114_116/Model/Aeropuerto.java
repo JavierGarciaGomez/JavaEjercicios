@@ -1,6 +1,9 @@
-package S17JavaFX.ejer114.modelo;
+package S17JavaFX.ejer114_116.Model;
+
+import javafx.collections.ObservableList;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -310,5 +313,7 @@ public abstract class Aeropuerto implements Serializable {
     public String toString() {
         return this.nombre;
     }
+
+    public abstract ObservableList getAeropuertos() throws SQLException;
 
 }

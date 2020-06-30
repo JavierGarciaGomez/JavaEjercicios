@@ -1,26 +1,28 @@
+package S17JavaFX.ejer114_116.Controller;
 
-package S17JavaFX.ejer114.controlador;
-
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Main extends Application {
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage primaryStage) {
-
         try {
+
             // Cargo la ventana inicial
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("/vista/LoginVista.fxml"));
-
+            loader.setLocation(Main.class.getResource("LoginView.fxml"));
             // Ventana a cargar
             Pane ventana = (Pane) loader.load();
 
@@ -30,7 +32,7 @@ public class Main extends Application {
             // Modifico el stage
             primaryStage.setScene(scene);
             primaryStage.setTitle("Login");
-            
+
             // Muestro la ventana
             primaryStage.show();
 
@@ -39,12 +41,4 @@ public class Main extends Application {
         }
 
     }
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-
 }

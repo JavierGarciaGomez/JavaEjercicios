@@ -1,6 +1,12 @@
-package S17JavaFX.ejer114.modelo;
+package S17JavaFX.ejer114_116.Model;
+
+import S17JavaFX.ejer114_116.Utilities.ConnectionDB;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Clase AeropuertoPrivado, heredada de Aeropuerto
@@ -123,6 +129,61 @@ public class AeropuertoPrivado extends Aeropuerto implements Serializable {
     @Override
     public String mostrarInformacion() {
         return super.mostrarInformacion() + " Es privado y tiene " + numSocios + " socios";
+    }
+
+    @Override
+    public ObservableList<AeropuertoPrivado> getAeropuertos() throws SQLException {
+
+        // Creo el ObservableList
+        ObservableList<AeropuertoPrivado> aeropuertos = FXCollections.observableArrayList();
+
+        // Abro la conexion
+        ConnectionDB conexion = new ConnectionDB();
+
+        // Formo el SQL
+        String SQL = "";
+        SQL += "SELECT a.id, a.nombre, a.anio_inauguracion, a.capacidad, ";
+        SQL += "d.pais, d.ciudad, d.calle, d.numero, ap.numero_socios ";
+        SQL += "FROM aeropuertos a, direcciones d, aeropuertos_privados ap ";
+        SQL += "WHERE a.id_direccion = d.id and ap.id_aeropuerto = a.id";
+
+        // Ejecuto la consulta y la guardo en un resultset
+        ResultSet rs = conexion.ejecutarConsulta(SQL);
+
+        // Recorro los datos
+        while (rs.next()) {
+
+            int id = rs.getInt("id");
+            String nombre = rs.getString("nombre");
+            int anio = rs.getInt("anio_inauguracion");
+            int capacidad = rs.getInt("capacidad");
+            String pais = rs.getString("pais");
+            String ciudad = rs.getString("ciudad");
+            String calle = rs.getString("calle");
+            int numero = rs.getInt("numero");
+
+            int numeroSocios = rs.getInt("numero_socios");
+
+            // Creo la direccion
+            Direccion dir = new Direccion(pais, calle, numero, ciudad);
+
+            // Creo el aeropuerto
+            AeropuertoPrivado a = new AeropuertoPrivado(numeroSocios, id, nombre, dir, anio, capacidad);
+
+            // Añado el aeropuerto a la lista
+            aeropuertos.add(a);
+
+        }
+
+        // Cerramos el ResultSet
+        rs.close();
+
+        // Cerramos la conexion
+        conexion.cerrarConexion();
+
+        // Devuelvo el observable de aeropuertos
+        return aeropuertos;
+
     }
 
 }

@@ -6,6 +6,7 @@ module JavaEjercicios.S17JavaFX {
     requires java.sql;
 
     opens S17JavaFX.ejer112.Controller;
+    opens S17JavaFX.ejer114_116.Controller;
 
 
 

@@ -1,8 +1,9 @@
-package S17JavaFX.ejer114.modelo;
+package S17JavaFX.ejer114_116.Model;
+
+import S17JavaFX.ejer114_116.Utilities.ConnectionDB;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import util.ConexionDB;
 
 /**
  * Clase Usuario, representa a un usuario
@@ -37,20 +38,20 @@ public class Usuario {
 
     public boolean login() throws SQLException {
 
-        ConexionDB conexion = new ConexionDB();
+        ConnectionDB connectionDB = new ConnectionDB();
 
         String SQL = "";
         SQL += "SELECT * ";
         SQL += "FROM usuarios ";
         SQL += "WHERE lower(usuario) = '" + usuario.toLowerCase() + "' and password = '" + password + "'";
         
-        ResultSet rs = conexion.ejecutarConsulta(SQL);
+        ResultSet rs = connectionDB.ejecutarConsulta(SQL);
         
-        boolean hayUsuarios = rs.next();
+        boolean isUser = rs.next();
         
-        conexion.cerrarConexion();
+        connectionDB.cerrarConexion();
 
-        return hayUsuarios;
+        return isUser;
         
     }
 

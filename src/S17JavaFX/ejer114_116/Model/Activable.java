@@ -1,4 +1,4 @@
-package S17JavaFX.ejer114.modelo;
+package S17JavaFX.ejer114_116.Model;
 
 /**
  * Interfaz Activable
