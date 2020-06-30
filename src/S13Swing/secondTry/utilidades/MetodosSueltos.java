@@ -13,6 +13,12 @@ import java.io.ObjectOutputStream;
 
 public class MetodosSueltos {
 
+    /*
+        Cuando metemos nuevos aeropuertos algo va mal, el id se reinicia.
+        Vemos como arreglarlo.
+    */
+
+
     /**
      * Rellena los aeropuertos del fichero de datos en la lista
      */
@@ -22,6 +28,7 @@ public class MetodosSueltos {
 
             while (true) {
                 Aeropuerto a = (Aeropuerto) ois.readObject();
+                System.out.println(a.getNombre());
                 VariablesGlobales.aeropuertos.add(a);
             }
 
@@ -31,6 +38,8 @@ public class MetodosSueltos {
         } catch (IOException | ClassNotFoundException ex) {
             System.out.println(ex.getMessage());
         }
+
+        actualizarId();
     }
 
     /**
@@ -55,6 +64,27 @@ public class MetodosSueltos {
         }
 
         VariablesGlobales.aeropuertos.add(a);
+
+    }
+
+    private static void actualizarId(){
+
+        if(VariablesGlobales.aeropuertos.size()>0){
+
+            int idMayor=1;
+            for (Aeropuerto aux:VariablesGlobales.aeropuertos) {
+
+                if(aux.getId() > idMayor){
+                    idMayor = aux.getId();
+                }
+
+            }
+
+            Aeropuerto.setId_automerado(idMayor+1);
+
+
+        }
+
 
     }
 

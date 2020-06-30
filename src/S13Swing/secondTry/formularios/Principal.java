@@ -1,11 +1,13 @@
 package S13Swing.secondTry.formularios;
 
+
 import S13Swing.secondTry.clases.Aeropuerto;
 import S13Swing.secondTry.clases.AeropuertoPrivado;
 import S13Swing.secondTry.clases.AeropuertoPublico;
 import S13Swing.secondTry.utilidades.MetodosSueltos;
 import S13Swing.secondTry.utilidades.VariablesGlobales;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class Principal extends javax.swing.JFrame {
@@ -15,11 +17,6 @@ public class Principal extends javax.swing.JFrame {
     private final int PRIVADO = 1;
     private final int PUBLICO = 2;
 
-    /*
-        En la ventana Principal, añade un JTextfield encima de la tabla de
-        aeropuertos y cuando se escriba una letra filtre por coincidencia en el nombre.
-        Usa el evento de teclado para ello.
-     */
     public Principal() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -179,6 +176,11 @@ public class Principal extends javax.swing.JFrame {
         jMenu3.add(jMenuItem1);
 
         jMenuItem2.setText("Editar...");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem2);
 
         jMenuItem3.setText("Borrar");
@@ -283,7 +285,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
 
-        AniadirAeropuerto ventana = new AniadirAeropuerto(this, true);
+        AniadirEditarAeropuerto ventana = new AniadirEditarAeropuerto(this, true);
         ventana.setVisible(true);
         if (this.rdbPrivado.isSelected()) {
             this.cargarDatos(PRIVADO, this.txtFiltroNombre.getText());
@@ -312,6 +314,39 @@ public class Principal extends javax.swing.JFrame {
             this.cargarDatos(PUBLICO, this.txtFiltroNombre.getText());
         }
     }//GEN-LAST:event_txtFiltroNombreKeyReleased
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+
+        if (this.tblAeropuertos.getSelectedRow() != -1) {
+
+            int fila = this.tblAeropuertos.getSelectedRow();
+
+            int id = (int) this.tblAeropuertos.getValueAt(fila, 0);
+
+            Aeropuerto aeropuertoEditar = null;
+            for (Aeropuerto aux : VariablesGlobales.aeropuertos) {
+                if (aux.getId() == id) {
+                    aeropuertoEditar = aux;
+                }
+            }
+
+            AniadirEditarAeropuerto ventana = new AniadirEditarAeropuerto(this, true, aeropuertoEditar);
+            ventana.setVisible(true);
+            if (this.rdbPrivado.isSelected()) {
+                this.cargarDatos(PRIVADO, this.txtFiltroNombre.getText());
+            } else {
+                this.cargarDatos(PUBLICO, this.txtFiltroNombre.getText());
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "No hay filas seleccionadas",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
+
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

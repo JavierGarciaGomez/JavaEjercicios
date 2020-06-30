@@ -7,9 +7,10 @@ import javax.swing.JOptionPane;
 import S13Swing.secondTry.clases.*;
 import S13Swing.secondTry.utilidades.*;
 
-public class AniadirAeropuerto extends javax.swing.JDialog {
+public class AniadirEditarAeropuerto extends javax.swing.JDialog {
+    private Aeropuerto aeropuertoEditar;
 
-    public AniadirAeropuerto(java.awt.Frame parent, boolean modal) {
+    public AniadirEditarAeropuerto(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
 
@@ -19,6 +20,18 @@ public class AniadirAeropuerto extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
 
     }
+
+    public AniadirEditarAeropuerto(java.awt.Frame parent, boolean modal, Aeropuerto aeropuerto) {
+        super(parent, modal);
+        initComponents();
+
+        this.buttonGroup1.add(this.rdbPrivado);
+        this.buttonGroup1.add(this.rdbPublico);
+
+        this.setLocationRelativeTo(null);
+
+    }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -255,7 +268,7 @@ public class AniadirAeropuerto extends javax.swing.JDialog {
 
             try {
                 MetodosSueltos.escribirAeropuerto(aux);
-                
+
                 JOptionPane.showMessageDialog(this,
                         "Aeropuerto creado correctamente",
                         "Éxito",
@@ -276,6 +289,46 @@ public class AniadirAeropuerto extends javax.swing.JDialog {
 
 
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void cargarDatos() {
+
+        this.txtNombre.setText(this.aeropuertoEditar.getNombre());
+        this.txtPais.setText(this.aeropuertoEditar.getDireccion().getPais());
+        this.txtCalle.setText(this.aeropuertoEditar.getDireccion().getCalle());
+        this.txtCiudad.setText(this.aeropuertoEditar.getDireccion().getCiudad());
+        this.txtNumero.setText(this.aeropuertoEditar.getDireccion().getNumero() + "");
+        this.txtAnioInauguracion.setText(this.aeropuertoEditar.getAnioInauguracion() + "");
+        this.txtCapacidad.setText(this.aeropuertoEditar.getCapacidad() + "");
+
+        if (this.aeropuertoEditar instanceof AeropuertoPrivado) {
+            AeropuertoPrivado aux = (AeropuertoPrivado) this.aeropuertoEditar;
+
+            this.txtNumSocios.setText(aux.getNumSocios() + "");
+            rdbPrivado.setSelected(true);
+
+            this.txtFinanciacion.setEnabled(false);
+            this.txtDiscapacitados.setEnabled(false);
+            this.txtNumSocios.setEnabled(true);
+        } else {
+
+            AeropuertoPublico aux = (AeropuertoPublico) this.aeropuertoEditar;
+
+            this.txtFinanciacion.setText(aux.getFinanciacion() + "");
+            this.txtDiscapacitados.setText(aux.getNumTrabajadoresDiscapacitados() + "");
+            rdbPrivado.setSelected(true);
+
+            this.txtFinanciacion.setEnabled(true);
+            this.txtDiscapacitados.setEnabled(true);
+            this.txtNumSocios.setEnabled(false);
+        }
+
+        this.rdbPrivado.setEnabled(false);
+        this.rdbPublico.setEnabled(false);
+
+    }
+
+
+
 
     private void txtCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCiudadActionPerformed
         // TODO add your handling code here:
@@ -325,3 +378,4 @@ public class AniadirAeropuerto extends javax.swing.JDialog {
     private javax.swing.JTextField txtPais;
     // End of variables declaration//GEN-END:variables
 }
+

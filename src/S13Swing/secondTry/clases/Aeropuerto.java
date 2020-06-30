@@ -139,6 +139,15 @@ public abstract class Aeropuerto implements Serializable {
     }
 
     /**
+     * Modifica el id automerado
+     *
+     * @param id_automerado valor nuevo
+     */
+    public static void setId_automerado(int id_automerado) {
+        Aeropuerto.id_automerado = id_automerado;
+    }
+
+    /**
      * Modifica la capacidad del aeropuerto
      *
      * @param capacidad nueva capacidad
