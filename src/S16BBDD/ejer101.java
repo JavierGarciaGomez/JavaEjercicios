@@ -2,7 +2,7 @@ package S16BBDD;
 
 import java.sql.*;
 
-public class Main {
+public class ejer101 {
     public static void main(String[] args) throws SQLException {
         Connection connection;
 

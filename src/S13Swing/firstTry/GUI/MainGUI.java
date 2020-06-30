@@ -87,7 +87,7 @@ public class MainGUI extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setContentPane(mainFramePanel);
-        this.setTitle("Main Frame");
+        this.setTitle("ejer101 Frame");
         this.setPreferredSize(new Dimension(500,500));
         this.pack();
         this.setVisible(true);

@@ -114,7 +114,7 @@ public class AddAirport extends JDialog {
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setContentPane(mainPanel);
-        this.setTitle("Main Frame");
+        this.setTitle("ejer101 Frame");
         this.pack();
         this.setVisible(true);
 
