@@ -1,6 +1,9 @@
 package S17JavaFX.ejer114_121.Model;
 
+import S17JavaFX.ejer114_121.Utilities.ConnectionDB;
+
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.Objects;
 
 /**
@@ -17,12 +20,13 @@ public class Avion implements Activable, Serializable {
     private int nAsientos;
     private double velocidadMaxima;
     private boolean activado;
+    private int idAeropuerto;
 
     /**
      * Constructor vacio
      */
     public Avion() {
-        this("", 0, 0);
+        this("", 0, 0,0);
     }
 
     /**
@@ -31,12 +35,15 @@ public class Avion implements Activable, Serializable {
      * @param nAsientos numero de asientos del avion
      * @param velocidadMaxima  velocidad maxima del avion
      */
-    public Avion(String modelo, int nAsientos, double velocidadMaxima) {
+
+    public Avion(String modelo, int nAsientos, double velocidadMaxima, int idAeropuerto) {
         this.modelo = modelo;
         this.nAsientos = nAsientos;
         this.velocidadMaxima = velocidadMaxima;
         this.activado = false;
+        this.idAeropuerto = idAeropuerto;
     }
+
     
     /**
      * Constructor completo
@@ -128,7 +135,52 @@ public class Avion implements Activable, Serializable {
         this.activado = value;
     }
 
-  
+    public boolean insertar() throws SQLException {
+        ConnectionDB conexion = new ConnectionDB();
+        int act = 0;
+
+        if (this.activado) {
+            act = 1;
+        }
+
+        String SQL = "";
+        SQL += "INSERT INTO aviones VALUES(null, ";
+        SQL += "'" + this.modelo + "', " + this.nAsientos + ", ";
+        SQL += this.velocidadMaxima + ", " + act + ", " + this.idAeropuerto + ") ";
+
+        int filas = conexion.ejecutarInstruccion(SQL);
+
+        this.id = conexion.ultimoID();
+
+        conexion.cerrarConexion();
+        return filas > 0;
+    }
+
+    public boolean actualizar() throws SQLException {
+        ConnectionDB conexion = new ConnectionDB();
+        int act = 0;
+
+        if (this.activado) {
+            act = 1;
+        }
+
+        String SQL = "UPDATE aviones SET activado =  " + act + " WHERE id = " + this.id;
+        int filas = conexion.ejecutarInstruccion(SQL);
+        conexion.cerrarConexion();
+        return filas > 0;
+
+    }
+
+    public boolean borrar() throws SQLException {
+        ConnectionDB conexion = new ConnectionDB();
+        String SQL = "DELETE FROM aviones WHERE id = " + this.id;
+        int filas = conexion.ejecutarInstruccion(SQL);
+        conexion.cerrarConexion();
+        return filas > 0;
+    }
+
+
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -147,12 +199,6 @@ public class Avion implements Activable, Serializable {
         return true;
     }
     
-    
-
-    /**
-     * Devuelve la informacion del objeto
-     * @return info
-     */
     @Override
     public String toString() {
         return "Avion{" + "modelo=" + modelo + ", nAsientos=" + nAsientos + ", velocidadMaxima=" + velocidadMaxima + '}';

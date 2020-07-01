@@ -1,5 +1,13 @@
 package S17JavaFX.ejer114_121.Utilities;
 
+import S17JavaFX.ejer114_121.Model.Aeropuerto;
+import S17JavaFX.ejer114_121.Model.AeropuertoPrivado;
+import S17JavaFX.ejer114_121.Model.AeropuertoPublico;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.sql.SQLException;
+
 public class MetodosSueltos {
 
     /**
@@ -20,6 +28,25 @@ public class MetodosSueltos {
      */
     public static boolean validaNumeroReal_Exp(String texto) {
         return texto.matches("^-?[0-9]+([\\.,][0-9]+)?$");
+    }
+
+    public static ObservableList<Aeropuerto> loadAirports() throws SQLException {
+        ObservableList<Aeropuerto> aeropuertos = FXCollections.observableArrayList();
+        AeropuertoPublico aeropuertoPublico = new AeropuertoPublico();
+        AeropuertoPrivado aeropuertoPrivado = new AeropuertoPrivado();
+
+        ObservableList<AeropuertoPublico> aeropuertosPublicos = aeropuertoPublico.getAeropuertos("");
+        ObservableList<AeropuertoPrivado> aeropuertoPrivados = aeropuertoPrivado.getAeropuertos("");
+
+        for(Aeropuerto a: aeropuertoPrivados){
+            aeropuertos.add(a);
+        }
+
+        for(Aeropuerto a: aeropuertosPublicos){
+            aeropuertos.add(a);
+        }
+
+        return aeropuertos;
     }
 
 }
