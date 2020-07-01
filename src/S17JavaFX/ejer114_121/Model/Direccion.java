@@ -1,6 +1,9 @@
 package S17JavaFX.ejer114_121.Model;
 
+import S17JavaFX.ejer114_121.Utilities.ConnectionDB;
+
 import java.io.Serializable;
+import java.sql.SQLException;
 
 /**
  * Clase Direccion, representa una direccion
@@ -133,6 +136,28 @@ public class Direccion implements Serializable{
     public String toString() {
         return "esta en el pais " + pais + " en la direccion: \n "
                 + "calle " + calle + ", numero " + numero + ", ciudad " + ciudad + ".";
+    }
+
+    public boolean insertar() throws SQLException {
+        // Abrimos la conexion
+        ConnectionDB conexion = new ConnectionDB();
+
+        // Formo el SQL
+        String SQL = "";
+        SQL += "INSERT INTO direcciones VALUES(null, ";
+        SQL += "'" + this.pais + "', '" + this.ciudad + "', '" + this.calle + "', " + this.numero + ")";
+
+        // Ejecuto la instruccion
+        int filas = conexion.ejecutarInstruccion(SQL);
+
+        this.id=conexion.ultimoID();
+
+        // Cierro la conexion
+        conexion.cerrarConexion();
+
+        // Indico si se ha insertado o no
+        return filas >0;
+
     }
 
 }

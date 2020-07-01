@@ -4,11 +4,17 @@ import S17JavaFX.ejer114_121.Model.*;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -32,6 +38,8 @@ public class MainController implements Initializable {
 
     @FXML
     TextField txtFilterName;
+
+    private Aeropuerto aeropuerto;
 
 
     @Override
@@ -77,8 +85,12 @@ public class MainController implements Initializable {
                 this.colPartners.setVisible(false);
             }
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("Error");
+            alert.setContentText(ex.getMessage());
+            alert.showAndWait();
         }
 
     }
@@ -98,9 +110,74 @@ public class MainController implements Initializable {
 
 
     public void addAirport(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AirportView.fxml"));
+            Parent root = null;
+            root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+
+            // Set up as a modal
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            stage.setScene(scene);
+            stage.setTitle("Add Airport");
+            stage.showAndWait();
+
+            this.loadAirports();
+
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("Error");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+
     }
 
     public void editAirport(ActionEvent event) {
+        Aeropuerto aeropuerto = (Aeropuerto) this.tblAirports.getSelectionModel().getSelectedItem();
+        if(aeropuerto==null){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("Error");
+            alert.setContentText("Debes seleccionar un aeropuerto");
+            alert.showAndWait();
+        } else{
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AirportView.fxml"));
+                Parent root = null;
+
+                MainController controller = fxmlLoader.getController();
+                controller.initAttributes(aeropuerto);
+                
+
+                root = fxmlLoader.load();
+                Scene scene = new Scene(root);
+                Stage stage = new Stage();
+
+                // Set up as a modal
+                stage.initModality(Modality.APPLICATION_MODAL);
+
+                stage.setScene(scene);
+                stage.setTitle("Edit Airport");
+                stage.showAndWait();
+
+                this.loadAirports();
+
+            } catch (IOException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText(null);
+                alert.setTitle("Error");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
+        }
+    }
+
+    public void initAttributes(Aeropuerto aeropuerto){
+
     }
 
     public void deleteAirport(ActionEvent event) {

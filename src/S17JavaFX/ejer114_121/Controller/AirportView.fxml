@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="520.0" prefWidth="302.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="S17JavaFX.ejer114_121.Controller.AeropuertoVista">
+<AnchorPane prefHeight="520.0" prefWidth="302.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="S17JavaFX.ejer114_121.Controller.AirportController">
    <children>
       <Label layoutX="38.0" layoutY="38.0" text="Nombre" />
       <TextField fx:id="txtName" layoutX="133.0" layoutY="34.0" />

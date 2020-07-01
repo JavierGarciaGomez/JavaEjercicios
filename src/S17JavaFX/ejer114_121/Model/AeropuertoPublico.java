@@ -201,4 +201,39 @@ public class AeropuertoPublico extends Aeropuerto implements Serializable {
         return aeropuertos;
     }
 
+    @Override
+    public boolean insertar() throws SQLException {
+
+        // Llamo al padre para insertar el aeropuerto
+        boolean exito = super.insertar();
+
+        // Si se insertó el aeropuerto
+        if (exito) {
+
+            // Abro la conexion
+            ConnectionDB conexion = new ConnectionDB();
+
+            // Formo el SQL
+            String SQL = "";
+            SQL += "INSERT INTO aeropuertos_publicos VALUES (" + super.getId() + ", ";
+            SQL += this.financiacion + ", " + this.numTrabajadoresDiscapacitados + ")";
+
+            // Ejecuto la instruccion
+            int filas = conexion.ejecutarInstruccion(SQL);
+
+            // cierro la conexion
+            conexion.cerrarConexion();
+
+            // Indico si se ha insertado o no
+            if (filas > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+    }
+
 }
