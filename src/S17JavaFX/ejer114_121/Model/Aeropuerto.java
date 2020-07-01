@@ -417,5 +417,11 @@ public abstract class Aeropuerto implements Serializable {
 
     }
 
-
+    public boolean borrarAeropuerto() throws SQLException {
+        ConnectionDB conexion = new ConnectionDB();
+        String SQL = "DELETE FROM aeropuertos where id = " + this.id;
+        int filas = conexion.ejecutarInstruccion(SQL);
+        conexion.cerrarConexion();
+        return filas > 0;
+    }
 }

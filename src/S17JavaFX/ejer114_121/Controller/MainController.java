@@ -17,7 +17,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainController implements Initializable {
 
@@ -39,8 +42,6 @@ public class MainController implements Initializable {
     @FXML
     TextField txtFilterName;
 
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ToggleGroup toggleGroup = new ToggleGroup();
@@ -59,15 +60,12 @@ public class MainController implements Initializable {
         this.colFinancing.setCellValueFactory(new PropertyValueFactory("financiacion"));
         this.colDisabled.setCellValueFactory(new PropertyValueFactory("numTrabajadoresDiscapacitados"));
 
-
-
         this.loadAirports();
     }
 
     private void loadAirports() {
         try {
             String busqueda = this.txtFilterName.getText();
-
 
             if (this.rdbPrivate.isSelected()) {
                 ObservableList<AeropuertoPrivado> observableList = new AeropuertoPrivado().getAeropuertos(busqueda);
@@ -76,7 +74,7 @@ public class MainController implements Initializable {
                 this.colDisabled.setVisible(false);
                 this.colPartners.setVisible(true);
 
-            } else{
+            } else {
                 ObservableList<AeropuertoPublico> observableList = new AeropuertoPublico().getAeropuertos(busqueda);
                 this.tblAirports.setItems(observableList);
                 this.colFinancing.setVisible(true);
@@ -84,16 +82,11 @@ public class MainController implements Initializable {
                 this.colPartners.setVisible(false);
             }
 
-        } catch (SQLException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText(null);
-            alert.setTitle("Error");
-            alert.setContentText(ex.getMessage());
-            alert.showAndWait();
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", e.getMessage());
         }
 
     }
-
 
     public void filterPrivate(ActionEvent event) {
         this.loadAirports();
@@ -106,7 +99,6 @@ public class MainController implements Initializable {
     public void filterByName(KeyEvent keyEvent) {
         this.loadAirports();
     }
-
 
     public void addAirport(ActionEvent event) {
         try {
@@ -127,24 +119,15 @@ public class MainController implements Initializable {
             this.tblAirports.refresh();
 
         } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText(null);
-            alert.setTitle("Error");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            showAlert(Alert.AlertType.ERROR, "Error", e.getMessage());
         }
-
     }
 
     public void editAirport(ActionEvent event) {
         Aeropuerto aeropuerto = (Aeropuerto) this.tblAirports.getSelectionModel().getSelectedItem();
-        if(aeropuerto==null){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText(null);
-            alert.setTitle("Error");
-            alert.setContentText("Debes seleccionar un aeropuerto");
-            alert.showAndWait();
-        } else{
+        if (aeropuerto == null) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Debes seleccionar un aeropuerto");
+        } else {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AirportView.fxml"));
                 Parent root = fxmlLoader.load();
@@ -166,16 +149,45 @@ public class MainController implements Initializable {
                 this.tblAirports.refresh();
 
             } catch (IOException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText(null);
-                alert.setTitle("Error");
-                alert.setContentText(e.getMessage());
-                alert.showAndWait();
+                showAlert(Alert.AlertType.ERROR, "Error", e.getMessage());
             }
         }
     }
 
     public void deleteAirport(ActionEvent event) {
+        Aeropuerto a = (Aeropuerto) this.tblAirports.getSelectionModel().getSelectedItem();
+
+        // Si es nulo, muestro error
+        if (a == null) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Debes seleccionar un aeropuerto");
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Confirmation");
+            alert.setContentText("¿Quieres borrar el aeropuerto?");
+
+            // Cogemos el resultado del boton seleccionado
+            Optional<ButtonType> action = alert.showAndWait();
+
+            // Si hemos pulsado en aceptar
+            if (action.get() == ButtonType.OK) {
+                try {
+                    if (a.borrarAeropuerto()) {
+                        if (a.getDireccion().borrar()) {
+                            showAlert(Alert.AlertType.INFORMATION, "Éxito", "Se ha borrado el aeropuerto y la dirección asociada");
+                        } else {
+                            showAlert(Alert.AlertType.INFORMATION, "Error", "No se ha borrado la dirección");
+                        }
+                    } else {
+                        showAlert(Alert.AlertType.ERROR, "Error", "No se ha borrado el aeropuerto");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                this.loadAirports();
+                this.tblAirports.refresh();
+            }
+        }
     }
 
     public void calculateEarnings(ActionEvent event) {
@@ -191,6 +203,14 @@ public class MainController implements Initializable {
     }
 
     public void activateAirplane(ActionEvent event) {
+    }
+
+    public void showAlert(Alert.AlertType alertType, String title, String contentText) {
+        Alert alert = new Alert(alertType);
+        alert.setHeaderText(null);
+        alert.setTitle(title);
+        alert.setContentText(contentText);
+        alert.showAndWait();
     }
 
 

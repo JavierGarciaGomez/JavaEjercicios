@@ -184,4 +184,11 @@ public class Direccion implements Serializable{
     }
 
 
+    public boolean borrar() throws SQLException {
+        ConnectionDB conexion = new ConnectionDB();
+        String SQL = "DELETE FROM direcciones WHERE id = " + this.id;
+        int filas = conexion.ejecutarInstruccion(SQL);
+        conexion.cerrarConexion();
+        return filas > 0;
+    }
 }
