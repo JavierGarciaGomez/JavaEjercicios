@@ -63,11 +63,17 @@ public class Direccion implements Serializable{
     public int getId() {
         return id;
     }
-    
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     /**
      * Devuelve el pais
      * @return pais
      */
+
+
     public String getPais() {
         return pais;
     }
@@ -159,5 +165,23 @@ public class Direccion implements Serializable{
         return filas >0;
 
     }
+
+    public boolean actualizar() throws SQLException {
+
+        ConnectionDB conexion = new ConnectionDB();
+
+        String SQL = "";
+        SQL += "UPDATE direcciones SET pais = '" + this.pais + "', ciudad = '" + this.ciudad + "', ";
+        SQL += "calle = '" + this.calle + "', numero = " + this.numero + " ";
+        SQL += "WHERE id = " + this.id;
+
+        int filas = conexion.ejecutarInstruccion(SQL);
+
+        conexion.cerrarConexion();
+
+        return filas > 0;
+
+    }
+
 
 }

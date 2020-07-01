@@ -167,7 +167,7 @@ public class AeropuertoPublico extends Aeropuerto implements Serializable {
 
         String SQL = "";
         SQL += "SELECT a.id, a.nombre, a.anio_inauguracion, a.capacidad, ";
-        SQL += "d.pais, d.ciudad, d.calle, d.numero, ap.financiacion, ap.num_trab_discapacitados ";
+        SQL += "d.id as id_direccion, d.pais, d.ciudad, d.calle, d.numero, ap.financiacion, ap.num_trab_discapacitados ";
         SQL += "FROM aeropuertos a, direcciones d, aeropuertos_publicos ap ";
         SQL += "WHERE a.id_direccion = d.id and ap.id_aeropuerto = a.id";
 
@@ -182,6 +182,7 @@ public class AeropuertoPublico extends Aeropuerto implements Serializable {
             String nombre = rs.getString("nombre");
             int anio = rs.getInt("anio_inauguracion");
             int capacidad = rs.getInt("capacidad");
+            int idDireccion = rs.getInt("id_direccion");
             String pais = rs.getString("pais");
             String ciudad = rs.getString("ciudad");
             String calle = rs.getString("calle");
@@ -192,6 +193,7 @@ public class AeropuertoPublico extends Aeropuerto implements Serializable {
             Direccion dir = new Direccion(pais, calle, numero, ciudad);
 
             AeropuertoPublico a = new AeropuertoPublico(financiacion, discapacitados, id, nombre, dir, anio, capacidad);
+            a.getDireccion().setId(idDireccion);
 
             aeropuertos.add(a);
         }
@@ -225,6 +227,34 @@ public class AeropuertoPublico extends Aeropuerto implements Serializable {
             conexion.cerrarConexion();
 
             // Indico si se ha insertado o no
+            if (filas > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+    }
+
+    public boolean actualizar() throws SQLException {
+
+        boolean exito = super.actualizar();
+
+        if (exito) {
+
+            ConnectionDB conexion = new ConnectionDB();
+
+            String SQL = "";
+            SQL += "UPDATE aeropuertos_publicos SET financiacion = " + this.financiacion + ", ";
+            SQL += "num_trab_discapacitados = " + this.numTrabajadoresDiscapacitados + " ";
+            SQL += "WHERE id_aeropuerto = " + super.getId();
+
+            int filas = conexion.ejecutarInstruccion(SQL);
+
+            conexion.cerrarConexion();
+
             if (filas > 0) {
                 return true;
             } else {

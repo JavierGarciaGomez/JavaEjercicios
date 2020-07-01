@@ -39,7 +39,6 @@ public class MainController implements Initializable {
     @FXML
     TextField txtFilterName;
 
-    private Aeropuerto aeropuerto;
 
 
     @Override
@@ -125,6 +124,7 @@ public class MainController implements Initializable {
             stage.showAndWait();
 
             this.loadAirports();
+            this.tblAirports.refresh();
 
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -147,13 +147,11 @@ public class MainController implements Initializable {
         } else{
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AirportView.fxml"));
-                Parent root = null;
+                Parent root = fxmlLoader.load();
 
-                MainController controller = fxmlLoader.getController();
+                AirportController controller = fxmlLoader.getController();
                 controller.initAttributes(aeropuerto);
-                
 
-                root = fxmlLoader.load();
                 Scene scene = new Scene(root);
                 Stage stage = new Stage();
 
@@ -165,6 +163,7 @@ public class MainController implements Initializable {
                 stage.showAndWait();
 
                 this.loadAirports();
+                this.tblAirports.refresh();
 
             } catch (IOException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -174,10 +173,6 @@ public class MainController implements Initializable {
                 alert.showAndWait();
             }
         }
-    }
-
-    public void initAttributes(Aeropuerto aeropuerto){
-
     }
 
     public void deleteAirport(ActionEvent event) {

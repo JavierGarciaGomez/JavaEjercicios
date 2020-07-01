@@ -389,5 +389,33 @@ public abstract class Aeropuerto implements Serializable {
     }
 
 
+    public boolean actualizar() throws SQLException {
+
+        // Abrimos la conexion
+        ConnectionDB conexion = new ConnectionDB();
+
+        // Formo el SQL
+        String SQL = "";
+        SQL += "UPDATE aeropuertos ";
+        SQL += "SET nombre = '"+this.nombre+"', anio_inauguracion = " + this.anioInauguracion + ", ";
+        SQL += "capacidad = " + this.capacidad + ", id_direccion = " + this.direccion.getId() + " ";
+        SQL += "WHERE id = " + this.id;
+
+
+        // Ejecuto la instruccion
+        int filas = conexion.ejecutarInstruccion(SQL);
+
+        // Cierro la conexion
+        conexion.cerrarConexion();
+
+        // Indico si se ha insertado o no
+        if (filas > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
 
 }

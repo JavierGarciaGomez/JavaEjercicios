@@ -28,6 +28,9 @@ public class AirportController implements Initializable {
     @FXML
     Button btnRegister, btnCancel;
 
+    private Aeropuerto aeropuerto;
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ToggleGroup group = new ToggleGroup();
@@ -82,52 +85,106 @@ public class AirportController implements Initializable {
                 int capacidad = Integer.parseInt(this.txtCapacity.getText());
                 int anioInauguracion = Integer.parseInt(this.txtYear.getText());
 
-                Aeropuerto aux;
+                // si no hay aeropuerto inserat, en caso contrario actualiza
+                if(this.aeropuerto==null){
+                    Aeropuerto aux;
 
-                // Creo la direccion
-                Direccion dir = new Direccion(pais, calle, numero, ciudad);
+                    // Creo la direccion
+                    Direccion dir = new Direccion(pais, calle, numero, ciudad);
 
-                // Inserto la direccion
-                if (dir.insertar()) {
+                    // Inserto la direccion
+                    if (dir.insertar()) {
 
-                    // Si elegimos publico
-                    if (this.rbtPublic.isSelected()) {
+                        // Si elegimos publico
+                        if (this.rbtPublic.isSelected()) {
 
-                        // Obtenemos los datos del aeropuerto publico
-                        double financiacion = Double.parseDouble(this.txtFinancing.getText());
-                        int discapacitados = Integer.parseInt(this.txtDisabled.getText());
+                            // Obtenemos los datos del aeropuerto publico
+                            double financiacion = Double.parseDouble(this.txtFinancing.getText());
+                            int discapacitados = Integer.parseInt(this.txtDisabled.getText());
 
-                        aux = new AeropuertoPublico(financiacion, discapacitados, nombre, dir, anioInauguracion, capacidad);
+                            aux = new AeropuertoPublico(financiacion, discapacitados, nombre, dir, anioInauguracion, capacidad);
 
-                    } else {
+                        } else {
 
-                        // Obtenemos los datos del aeropuerto pricado
-                        int socios = Integer.parseInt(this.txtPartners.getText());
+                            // Obtenemos los datos del aeropuerto pricado
+                            int socios = Integer.parseInt(this.txtPartners.getText());
 
-                        aux = new AeropuertoPrivado(socios, nombre, dir, anioInauguracion, capacidad);
+                            aux = new AeropuertoPrivado(socios, nombre, dir, anioInauguracion, capacidad);
+
+                        }
+
+                        // Seteamos de nuevo la direccion
+                        // Esto es porque cuando creamos el objeto del aeropuerto, este no le metemos el id directamente
+                        aux.setDireccion(dir);
+
+                        // Inserto el aeropuerto
+                        if (aux.insertar()) {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setHeaderText(null);
+                            alert.setTitle("Exito");
+                            alert.setContentText("El aeropuerto se ha insertado");
+                            alert.showAndWait();
+                        } else {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setHeaderText(null);
+                            alert.setTitle("Error");
+                            alert.setContentText("El aeropuerto no se ha insertado");
+                            alert.showAndWait();
+                        }
 
                     }
 
-                    // Seteamos de nuevo la direccion
-                    // Esto es porque cuando creamos el objeto del aeropuerto, este no le metemos el id directamente
-                    aux.setDireccion(dir);
+                }else { // en caso de actualizar
+                    this.aeropuerto.setNombre(nombre);
+                    this.aeropuerto.setCapacidad(capacidad);
+                    this.aeropuerto.setAnioInauguracion(anioInauguracion);
 
-                    // Inserto el aeropuerto
-                    if (aux.insertar()) {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setHeaderText(null);
-                        alert.setTitle("Exito");
-                        alert.setContentText("El aeropuerto se ha insertado");
-                        alert.showAndWait();
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setHeaderText(null);
-                        alert.setTitle("Error");
-                        alert.setContentText("El aeropuerto no se ha insertado");
-                        alert.showAndWait();
+                    Direccion dir = this.aeropuerto.getDireccion();
+
+                    dir.setPais(pais);
+                    dir.setCalle(calle);
+                    dir.setCiudad(ciudad);
+                    dir.setNumero(numero);
+
+                    if (dir.actualizar()) {
+
+                        if (this.rbtPublic.isSelected()) {
+
+                            double financiacion = Double.parseDouble(this.txtFinancing.getText());
+                            int discapacitados = Integer.parseInt(this.txtDisabled.getText());
+
+                            AeropuertoPublico ap = (AeropuertoPublico) this.aeropuerto;
+                            ap.setFinanciacion(financiacion);
+                            ap.setNumTrabajadoresDiscapacitados(discapacitados);
+
+                        } else {
+
+                            int socios = Integer.parseInt(this.txtPartners.getText());
+                            AeropuertoPrivado ap = (AeropuertoPrivado) this.aeropuerto;
+
+                            ap.setNumSocios(socios);
+
+                        }
+
+                        // Actualizamos el aeropuerto
+                        if (this.aeropuerto.actualizar()) {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setHeaderText(null);
+                            alert.setTitle("Exito");
+                            alert.setContentText("El aeropuerto se ha actualizado");
+                            alert.showAndWait();
+                        } else {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setHeaderText(null);
+                            alert.setTitle("Error");
+                            alert.setContentText("El aeropuerto no se ha actualizado");
+                            alert.showAndWait();
+                        }
+
                     }
 
                 }
+
             } catch (SQLException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setHeaderText(null);
@@ -152,5 +209,32 @@ public class AirportController implements Initializable {
         Stage myStage = (Stage) this.btnRegister.getScene().getWindow();
         myStage.close();
     }
+
+    public void initAttributes(Aeropuerto aeropuerto){
+        this.aeropuerto=aeropuerto;
+        this.txtName.setText(aeropuerto.getNombre());
+        this.txtCountry.setText(aeropuerto.getPais());
+        this.txtCity.setText(aeropuerto.getCiudad());
+        this.txtStreet.setText(aeropuerto.getCalle());
+        this.txtNumber.setText(aeropuerto.getNumero()+"");
+        this.txtCapacity.setText(aeropuerto.getCapacidad()+"");
+        this.txtYear.setText(aeropuerto.getAnioInauguracion()+"");
+        if(aeropuerto instanceof AeropuertoPublico){
+            this.rbtPublic.setSelected(true);
+
+            this.txtFinancing.setText(((AeropuertoPublico) aeropuerto).getFinanciacion()+"");
+            this.txtDisabled.setText(((AeropuertoPublico) aeropuerto).getNumTrabajadoresDiscapacitados()+"");
+        } else{
+            this.rbtPrivate.setSelected(true);
+
+            this.txtPartners.setText(((AeropuertoPrivado) aeropuerto).getNumSocios()+"");
+        }
+        this.rbtPrivate.setDisable(true);
+        this.rbtPublic.setDisable(true);
+
+
+
+    }
+
 
 }

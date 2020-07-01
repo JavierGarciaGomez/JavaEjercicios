@@ -143,9 +143,11 @@ public class AeropuertoPrivado extends Aeropuerto implements Serializable {
         // Formo el SQL
         String SQL = "";
         SQL += "SELECT a.id, a.nombre, a.anio_inauguracion, a.capacidad, ";
-        SQL += "d.pais, d.ciudad, d.calle, d.numero, ap.numero_socios ";
+        SQL += "d.id as id_direccion, d.pais, d.ciudad, d.calle, d.numero, ap.numero_socios ";
         SQL += "FROM aeropuertos a, direcciones d, aeropuertos_privados ap ";
         SQL += "WHERE a.id_direccion = d.id and ap.id_aeropuerto = a.id";
+
+
 
         if(busqueda!=null && !busqueda.isEmpty()){
             SQL += " and trim(lower(a.nombre)) Like '%"+busqueda.toLowerCase().trim()+"%'";
@@ -161,6 +163,7 @@ public class AeropuertoPrivado extends Aeropuerto implements Serializable {
             String nombre = rs.getString("nombre");
             int anio = rs.getInt("anio_inauguracion");
             int capacidad = rs.getInt("capacidad");
+            int idDireccion = rs.getInt("id_direccion");
             String pais = rs.getString("pais");
             String ciudad = rs.getString("ciudad");
             String calle = rs.getString("calle");
@@ -173,6 +176,7 @@ public class AeropuertoPrivado extends Aeropuerto implements Serializable {
 
             // Creo el aeropuerto
             AeropuertoPrivado a = new AeropuertoPrivado(numeroSocios, id, nombre, dir, anio, capacidad);
+            a.getDireccion().setId(idDireccion);
 
             // Añado el aeropuerto a la lista
             aeropuertos.add(a);
@@ -220,6 +224,33 @@ public class AeropuertoPrivado extends Aeropuerto implements Serializable {
             conexion.cerrarConexion();
 
             // Indico si se ha insertado o no
+            if (filas > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+    }
+
+    public boolean actualizar() throws SQLException {
+
+        boolean exito = super.actualizar();
+
+        if (exito) {
+
+            ConnectionDB conexion = new ConnectionDB();
+
+            String SQL = "";
+            SQL += "UPDATE aeropuertos_privados SET numero_socios = " + this.numSocios + " ";
+            SQL += "WHERE id_aeropuerto = " + super.getId();
+
+            int filas = conexion.ejecutarInstruccion(SQL);
+
+            conexion.cerrarConexion();
+
             if (filas > 0) {
                 return true;
             } else {
