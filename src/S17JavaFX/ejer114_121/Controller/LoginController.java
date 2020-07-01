@@ -41,12 +41,6 @@ public class LoginController implements Initializable {
         Usuario user = new Usuario(userName, pass);
 
             if(user.login()){
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText(null);
-                alert.setTitle("Éxito");
-                alert.setContentText("Login correcto");
-                alert.showAndWait();
-
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MainView.fxml"));
                 Parent root = fxmlLoader.load();
                 Scene scene = new Scene(root);

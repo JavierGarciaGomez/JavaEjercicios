@@ -1,6 +1,7 @@
 package S17JavaFX.ejer114_121.Controller;
 
 import S17JavaFX.ejer114_121.Model.*;
+import S17JavaFX.ejer114_121.Utilities.MetodosSueltos;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,7 +26,7 @@ import java.util.logging.Logger;
 public class MainController implements Initializable {
 
     @FXML
-    TableView tblAirports;
+    private TableView tblAirports;
 
     @FXML
     TableColumn<Aeropuerto, Integer> colId, colNumber, colYear, colCapacity, colDisabled, colPartners;
@@ -191,9 +192,41 @@ public class MainController implements Initializable {
     }
 
     public void calculateEarnings(ActionEvent event) {
+        Aeropuerto a = (Aeropuerto) this.tblAirports.getSelectionModel().getSelectedItem();
+
+        // Si es nulo
+        if (a == null) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Debes seleccionar un aeropuerto");
+        } else {
+            // TextInputDialog sirve parapedir valores
+            TextInputDialog tid = new TextInputDialog();
+            tid.setHeaderText(null);
+            tid.setTitle("Error");
+            tid.setContentText("Introduce una cantidad");
+            Optional<String> texto = tid.showAndWait();
+
+            // Valido si es un numero real
+            if (!MetodosSueltos.validaNumeroReal_Exp(texto.get())) {
+                showAlert(Alert.AlertType.ERROR, "Error", "El número debe ser una cantidad real");
+            } else {
+                double cantidad = Double.parseDouble(texto.get());
+                showAlert(Alert.AlertType.INFORMATION, "Ganancias", a.gananciasTotales(cantidad));
+            }
+
+        }
+
     }
 
     public void showAirportInfo(ActionEvent event) {
+        Aeropuerto a = (Aeropuerto) this.tblAirports.getSelectionModel().getSelectedItem();
+
+        // Si es nulo, muestro error
+        if (a == null) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Debes seleccionar un aeropuerto");
+        } else {
+            showAlert(Alert.AlertType.INFORMATION, "Éxito", a.mostrarInformacion());
+        }
+
     }
 
     public void addAirplane(ActionEvent event) {
@@ -212,6 +245,4 @@ public class MainController implements Initializable {
         alert.setContentText(contentText);
         alert.showAndWait();
     }
-
-
 }
