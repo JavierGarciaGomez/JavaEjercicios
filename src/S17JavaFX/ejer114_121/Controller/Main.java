@@ -3,6 +3,7 @@ package S17JavaFX.ejer114_121.Controller;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -32,9 +33,11 @@ public class Main extends Application {
             // Modifico el stage
             primaryStage.setScene(scene);
             primaryStage.setTitle("Login");
+            primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("plane.png")));
 
             // Muestro la ventana
             primaryStage.show();
+
 
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

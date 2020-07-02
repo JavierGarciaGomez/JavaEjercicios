@@ -5,6 +5,8 @@ import S17JavaFX.ejer114_121.Model.AeropuertoPrivado;
 import S17JavaFX.ejer114_121.Model.AeropuertoPublico;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
@@ -49,4 +51,7 @@ public class MetodosSueltos {
         return aeropuertos;
     }
 
+    public static void iconoVentana(Stage stage){
+        stage.getIcons().add(new Image("/img/plane.png"));
+    }
 }
