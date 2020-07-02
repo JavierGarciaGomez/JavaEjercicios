@@ -189,6 +189,16 @@ public class AeropuertoPrivado extends Aeropuerto implements Serializable {
         // Cerramos la conexion
         conexion.cerrarConexion();
 
+        for(AeropuertoPrivado a: aeropuertos){
+            Avion avion = new Avion();
+            avion.setIdAeropuerto(a.getId());
+
+            ObservableList<Avion> aviones = avion.getAviones();
+            for(Avion av: aviones){
+                a.aniadirAvion(av);
+            }
+        }
+
         // Devuelvo el observable de aeropuertos
         return aeropuertos;
 

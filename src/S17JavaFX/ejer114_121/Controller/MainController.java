@@ -230,12 +230,55 @@ public class MainController implements Initializable {
     }
 
     public void addAirplane(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AirplaneView.fxml"));
+            Parent root = null;
+            root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            stage.setScene(scene);
+            stage.setTitle("Add Airplane");
+            stage.showAndWait();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", e.getMessage());
+        }
     }
 
     public void deleteAirplane(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("DeleteAirplaneView.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.setTitle("Delete Airplane");
+            stage.showAndWait();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", e.getMessage());
+        }
     }
 
     public void activateAirplane(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ActivateAirplaneView.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+
+            // Set up as a modal
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            stage.setScene(scene);
+            stage.setTitle("Activate/Deactivate Airport");
+            stage.showAndWait();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", e.getMessage());
+        }
     }
 
     public void showAlert(Alert.AlertType alertType, String title, String contentText) {

@@ -1,8 +1,11 @@
 package S17JavaFX.ejer114_121.Model;
 
 import S17JavaFX.ejer114_121.Utilities.ConnectionDB;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 
@@ -52,12 +55,13 @@ public class Avion implements Activable, Serializable {
      * @param nAsientos numero de asientos del avion
      * @param velocidadMaxima  velocidad maxima del avion
      */
-    public Avion(int id, String modelo, int nAsientos, double velocidadMaxima) {
+    public Avion(int id, String modelo, int nAsientos, double velocidadMaxima, int idAeropuerto) {
         this.id = id;
         this.modelo = modelo;
         this.nAsientos = nAsientos;
         this.velocidadMaxima = velocidadMaxima;
         this.activado = false;
+        this.idAeropuerto = idAeropuerto;
     }
 
     /**
@@ -163,7 +167,6 @@ public class Avion implements Activable, Serializable {
         if (this.activado) {
             act = 1;
         }
-
         String SQL = "UPDATE aviones SET activado =  " + act + " WHERE id = " + this.id;
         int filas = conexion.ejecutarInstruccion(SQL);
         conexion.cerrarConexion();
@@ -178,6 +181,36 @@ public class Avion implements Activable, Serializable {
         conexion.cerrarConexion();
         return filas > 0;
     }
+
+    public ObservableList<Avion> getAviones() throws SQLException {
+
+        ConnectionDB conexion = new ConnectionDB();
+        ObservableList<Avion> aviones = FXCollections.observableArrayList();
+
+        String SQL = "";
+        SQL += "SELECT *";
+        SQL += "FROM aviones ";
+        SQL += "WHERE id_aeropuerto = " + this.idAeropuerto;
+
+        ResultSet rs = conexion.ejecutarConsulta(SQL);
+
+        while (rs.next()) {
+            int idAvion = rs.getInt("id");
+            String modelo = rs.getString("modelo");
+            int numeroAsientos = rs.getInt("numero_asientos");
+            int velMax = rs.getInt("velocidad_maxima");
+            int activado = rs.getInt("activado");
+
+            Avion a = new Avion(idAvion, modelo, numeroAsientos, velMax, this.idAeropuerto);
+            if (activado == 1) {
+                a.setActivado(true);
+            }
+            aviones.add(a);
+        }
+        conexion.cerrarConexion();
+        return aviones;
+    }
+
 
 
 
@@ -204,4 +237,7 @@ public class Avion implements Activable, Serializable {
         return "Avion{" + "modelo=" + modelo + ", nAsientos=" + nAsientos + ", velocidadMaxima=" + velocidadMaxima + '}';
     }
 
+    public void setIdAeropuerto(int id) {
+        this.idAeropuerto=id;
+    }
 }

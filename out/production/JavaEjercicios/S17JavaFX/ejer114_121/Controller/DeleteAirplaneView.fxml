@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="199.0" prefWidth="325.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="S17JavaFX.ejer114_121.Controller.DeleteAirplaneController">
+    <children>
+        <Button fx:id="btnCancelar" layoutX="200.0" layoutY="137.0" mnemonicParsing="false" onAction="#cancelar" prefHeight="25.0" prefWidth="86.0" text="Cancelar">
+            <styleClass>
+                <String fx:value="button" />
+                <String fx:value="cancelar" />
+            </styleClass></Button>
+        <Button fx:id="btnEliminar" layoutX="104.0" layoutY="137.0" mnemonicParsing="false" onAction="#eliminarAvion" prefHeight="25.0" prefWidth="77.0" text="Eliminar">
+            <styleClass>
+                <String fx:value="button" />
+                <String fx:value="guardar" />
+            </styleClass></Button>
+        <Label layoutX="45.0" layoutY="89.0" text="Aviones" />
+        <Label layoutX="23.0" layoutY="41.0" text="Aeropuertos" />
+        <ComboBox fx:id="cmbAviones" layoutX="104.0" layoutY="85.0" prefHeight="25.0" prefWidth="182.0" styleClass="combo" />
+        <ComboBox fx:id="cmbAeropuertos" layoutX="104.0" layoutY="37.0" onAction="#cargarAviones" prefHeight="25.0" prefWidth="182.0" styleClass="combo" />
+    </children>
+</AnchorPane>

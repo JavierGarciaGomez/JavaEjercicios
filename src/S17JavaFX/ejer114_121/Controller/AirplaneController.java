@@ -7,6 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -68,6 +70,8 @@ public class AirplaneController implements Initializable {
 
 
     public void cancel(ActionEvent event) {
+        Stage myStage = (Stage) this.btnCancel.getScene().getWindow();
+        myStage.close();
     }
 
     public void showAlert(Alert.AlertType alertType, String title, String contentText) {
